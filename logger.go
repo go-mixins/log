@@ -21,4 +21,4 @@ type ContextLogger interface {
 	Logger
 }
 
-//go:generate moq -out mock/logger.go . ContextLogger
+//go:generate moq -out mock/logger.go -pkg mock . ContextLogger
