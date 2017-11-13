@@ -8,6 +8,9 @@ import (
 	graylog "gopkg.in/gemnasium/logrus-graylog-hook.v2"
 )
 
+// NewAsyncGraylogHook copied here to reduce import overhead
+var NewAsyncGraylogHook = graylog.NewAsyncGraylogHook
+
 // Some useful constants from Logrus to reduce import clutter
 const (
 	DebugLevel = logrus.DebugLevel
@@ -21,6 +24,8 @@ const (
 // New creates new ContextLogger with Logrus side-logging to specified URLs
 func New(graylogURI string) *logrus.ContextLogger {
 	res := logrus.New()
-	res.Hooks.Add(graylog.NewAsyncGraylogHook(graylogURI, nil))
+	if graylogURI != "" {
+		res.Hooks.Add(graylog.NewAsyncGraylogHook(graylogURI, nil))
+	}
 	return res
 }
