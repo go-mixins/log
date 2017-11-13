@@ -30,12 +30,12 @@ import (
 
 // Some useful constants from the Logrus to reduce import clutter
 const (
-	DebugLevel logrus.Level = logrus.DebugLevel
-	ErrorLevel logrus.Level = logrus.ErrorLevel
-	WarnLevel  logrus.Level = logrus.WarnLevel
-	InfoLevel  logrus.Level = logrus.InfoLevel
-	FatalLevel logrus.Level = logrus.FatalLevel
-	PanicLevel logrus.Level = logrus.PanicLevel
+	DebugLevel = logrus.DebugLevel
+	ErrorLevel = logrus.ErrorLevel
+	WarnLevel  = logrus.WarnLevel
+	InfoLevel  = logrus.InfoLevel
+	FatalLevel = logrus.FatalLevel
+	PanicLevel = logrus.PanicLevel
 )
 
 // ContextLogger implements log.ContextLogger
