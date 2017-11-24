@@ -13,6 +13,10 @@ type Logger interface {
 	Warnf(string, ...interface{})
 	Error(...interface{})
 	Errorf(string, ...interface{})
+	Fatal(...interface{})
+	Fatalf(string, ...interface{})
+	Panic(...interface{})
+	Panicf(string, ...interface{})
 }
 
 // ContextLogger adds some context to log entries
