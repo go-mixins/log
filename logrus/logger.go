@@ -43,7 +43,7 @@ type ContextLogger struct {
 	*logrus.Logger
 }
 
-var _ log.ContextLogger = &ContextLogger{}
+var _ log.ContextLogger = (*ContextLogger)(nil)
 
 // WithContext adds context to log entry
 func (cl *ContextLogger) WithContext(ctx log.M) log.ContextLogger {
