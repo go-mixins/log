@@ -4,9 +4,8 @@
 package mock
 
 import (
-	"sync"
-
 	"github.com/go-mixins/log"
+	"sync"
 )
 
 var (
@@ -14,6 +13,8 @@ var (
 	lockContextLoggerMockDebugf      sync.RWMutex
 	lockContextLoggerMockError       sync.RWMutex
 	lockContextLoggerMockErrorf      sync.RWMutex
+	lockContextLoggerMockFatal       sync.RWMutex
+	lockContextLoggerMockFatalf      sync.RWMutex
 	lockContextLoggerMockInfo        sync.RWMutex
 	lockContextLoggerMockInfof       sync.RWMutex
 	lockContextLoggerMockWarn        sync.RWMutex
@@ -38,6 +39,12 @@ var (
 //             },
 //             ErrorfFunc: func(in1 string, in2 ...interface{})  {
 // 	               panic("TODO: mock out the Errorf method")
+//             },
+//             FatalFunc: func(in1 ...interface{})  {
+// 	               panic("TODO: mock out the Fatal method")
+//             },
+//             FatalfFunc: func(in1 string, in2 ...interface{})  {
+// 	               panic("TODO: mock out the Fatalf method")
 //             },
 //             InfoFunc: func(in1 ...interface{})  {
 // 	               panic("TODO: mock out the Info method")
@@ -72,6 +79,12 @@ type ContextLoggerMock struct {
 
 	// ErrorfFunc mocks the Errorf method.
 	ErrorfFunc func(in1 string, in2 ...interface{})
+
+	// FatalFunc mocks the Fatal method.
+	FatalFunc func(in1 ...interface{})
+
+	// FatalfFunc mocks the Fatalf method.
+	FatalfFunc func(in1 string, in2 ...interface{})
 
 	// InfoFunc mocks the Info method.
 	InfoFunc func(in1 ...interface{})
@@ -109,6 +122,18 @@ type ContextLoggerMock struct {
 		}
 		// Errorf holds details about calls to the Errorf method.
 		Errorf []struct {
+			// In1 is the in1 argument value.
+			In1 string
+			// In2 is the in2 argument value.
+			In2 []interface{}
+		}
+		// Fatal holds details about calls to the Fatal method.
+		Fatal []struct {
+			// In1 is the in1 argument value.
+			In1 []interface{}
+		}
+		// Fatalf holds details about calls to the Fatalf method.
+		Fatalf []struct {
 			// In1 is the in1 argument value.
 			In1 string
 			// In2 is the in2 argument value.
@@ -275,6 +300,72 @@ func (mock *ContextLoggerMock) ErrorfCalls() []struct {
 	lockContextLoggerMockErrorf.RLock()
 	calls = mock.calls.Errorf
 	lockContextLoggerMockErrorf.RUnlock()
+	return calls
+}
+
+// Fatal calls FatalFunc.
+func (mock *ContextLoggerMock) Fatal(in1 ...interface{}) {
+	if mock.FatalFunc == nil {
+		panic("moq: ContextLoggerMock.FatalFunc is nil but ContextLogger.Fatal was just called")
+	}
+	callInfo := struct {
+		In1 []interface{}
+	}{
+		In1: in1,
+	}
+	lockContextLoggerMockFatal.Lock()
+	mock.calls.Fatal = append(mock.calls.Fatal, callInfo)
+	lockContextLoggerMockFatal.Unlock()
+	mock.FatalFunc(in1...)
+}
+
+// FatalCalls gets all the calls that were made to Fatal.
+// Check the length with:
+//     len(mockedContextLogger.FatalCalls())
+func (mock *ContextLoggerMock) FatalCalls() []struct {
+	In1 []interface{}
+} {
+	var calls []struct {
+		In1 []interface{}
+	}
+	lockContextLoggerMockFatal.RLock()
+	calls = mock.calls.Fatal
+	lockContextLoggerMockFatal.RUnlock()
+	return calls
+}
+
+// Fatalf calls FatalfFunc.
+func (mock *ContextLoggerMock) Fatalf(in1 string, in2 ...interface{}) {
+	if mock.FatalfFunc == nil {
+		panic("moq: ContextLoggerMock.FatalfFunc is nil but ContextLogger.Fatalf was just called")
+	}
+	callInfo := struct {
+		In1 string
+		In2 []interface{}
+	}{
+		In1: in1,
+		In2: in2,
+	}
+	lockContextLoggerMockFatalf.Lock()
+	mock.calls.Fatalf = append(mock.calls.Fatalf, callInfo)
+	lockContextLoggerMockFatalf.Unlock()
+	mock.FatalfFunc(in1, in2...)
+}
+
+// FatalfCalls gets all the calls that were made to Fatalf.
+// Check the length with:
+//     len(mockedContextLogger.FatalfCalls())
+func (mock *ContextLoggerMock) FatalfCalls() []struct {
+	In1 string
+	In2 []interface{}
+} {
+	var calls []struct {
+		In1 string
+		In2 []interface{}
+	}
+	lockContextLoggerMockFatalf.RLock()
+	calls = mock.calls.Fatalf
+	lockContextLoggerMockFatalf.RUnlock()
 	return calls
 }
 
