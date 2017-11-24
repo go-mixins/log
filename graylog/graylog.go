@@ -21,10 +21,10 @@ const (
 	PanicLevel = logrus.PanicLevel
 )
 
-// New creates new ContextLogger with Logrus side-logging to specified URLs
-func New(graylogURI string) *logrus.ContextLogger {
+// New creates new ContextLogger with Logrus side-logging to specified URIs
+func New(graylogURIs ...string) *logrus.ContextLogger {
 	res := logrus.New()
-	if graylogURI != "" {
+	for _, uri := range graylogURIs {
 		res.Hooks.Add(graylog.NewAsyncGraylogHook(graylogURI, nil))
 	}
 	return res
