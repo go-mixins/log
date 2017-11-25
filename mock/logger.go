@@ -17,6 +17,8 @@ var (
 	lockContextLoggerMockFatalf      sync.RWMutex
 	lockContextLoggerMockInfo        sync.RWMutex
 	lockContextLoggerMockInfof       sync.RWMutex
+	lockContextLoggerMockPanic       sync.RWMutex
+	lockContextLoggerMockPanicf      sync.RWMutex
 	lockContextLoggerMockWarn        sync.RWMutex
 	lockContextLoggerMockWarnf       sync.RWMutex
 	lockContextLoggerMockWithContext sync.RWMutex
@@ -51,6 +53,12 @@ var (
 //             },
 //             InfofFunc: func(in1 string, in2 ...interface{})  {
 // 	               panic("TODO: mock out the Infof method")
+//             },
+//             PanicFunc: func(in1 ...interface{})  {
+// 	               panic("TODO: mock out the Panic method")
+//             },
+//             PanicfFunc: func(in1 string, in2 ...interface{})  {
+// 	               panic("TODO: mock out the Panicf method")
 //             },
 //             WarnFunc: func(in1 ...interface{})  {
 // 	               panic("TODO: mock out the Warn method")
@@ -91,6 +99,12 @@ type ContextLoggerMock struct {
 
 	// InfofFunc mocks the Infof method.
 	InfofFunc func(in1 string, in2 ...interface{})
+
+	// PanicFunc mocks the Panic method.
+	PanicFunc func(in1 ...interface{})
+
+	// PanicfFunc mocks the Panicf method.
+	PanicfFunc func(in1 string, in2 ...interface{})
 
 	// WarnFunc mocks the Warn method.
 	WarnFunc func(in1 ...interface{})
@@ -146,6 +160,18 @@ type ContextLoggerMock struct {
 		}
 		// Infof holds details about calls to the Infof method.
 		Infof []struct {
+			// In1 is the in1 argument value.
+			In1 string
+			// In2 is the in2 argument value.
+			In2 []interface{}
+		}
+		// Panic holds details about calls to the Panic method.
+		Panic []struct {
+			// In1 is the in1 argument value.
+			In1 []interface{}
+		}
+		// Panicf holds details about calls to the Panicf method.
+		Panicf []struct {
 			// In1 is the in1 argument value.
 			In1 string
 			// In2 is the in2 argument value.
@@ -432,6 +458,72 @@ func (mock *ContextLoggerMock) InfofCalls() []struct {
 	lockContextLoggerMockInfof.RLock()
 	calls = mock.calls.Infof
 	lockContextLoggerMockInfof.RUnlock()
+	return calls
+}
+
+// Panic calls PanicFunc.
+func (mock *ContextLoggerMock) Panic(in1 ...interface{}) {
+	if mock.PanicFunc == nil {
+		panic("moq: ContextLoggerMock.PanicFunc is nil but ContextLogger.Panic was just called")
+	}
+	callInfo := struct {
+		In1 []interface{}
+	}{
+		In1: in1,
+	}
+	lockContextLoggerMockPanic.Lock()
+	mock.calls.Panic = append(mock.calls.Panic, callInfo)
+	lockContextLoggerMockPanic.Unlock()
+	mock.PanicFunc(in1...)
+}
+
+// PanicCalls gets all the calls that were made to Panic.
+// Check the length with:
+//     len(mockedContextLogger.PanicCalls())
+func (mock *ContextLoggerMock) PanicCalls() []struct {
+	In1 []interface{}
+} {
+	var calls []struct {
+		In1 []interface{}
+	}
+	lockContextLoggerMockPanic.RLock()
+	calls = mock.calls.Panic
+	lockContextLoggerMockPanic.RUnlock()
+	return calls
+}
+
+// Panicf calls PanicfFunc.
+func (mock *ContextLoggerMock) Panicf(in1 string, in2 ...interface{}) {
+	if mock.PanicfFunc == nil {
+		panic("moq: ContextLoggerMock.PanicfFunc is nil but ContextLogger.Panicf was just called")
+	}
+	callInfo := struct {
+		In1 string
+		In2 []interface{}
+	}{
+		In1: in1,
+		In2: in2,
+	}
+	lockContextLoggerMockPanicf.Lock()
+	mock.calls.Panicf = append(mock.calls.Panicf, callInfo)
+	lockContextLoggerMockPanicf.Unlock()
+	mock.PanicfFunc(in1, in2...)
+}
+
+// PanicfCalls gets all the calls that were made to Panicf.
+// Check the length with:
+//     len(mockedContextLogger.PanicfCalls())
+func (mock *ContextLoggerMock) PanicfCalls() []struct {
+	In1 string
+	In2 []interface{}
+} {
+	var calls []struct {
+		In1 string
+		In2 []interface{}
+	}
+	lockContextLoggerMockPanicf.RLock()
+	calls = mock.calls.Panicf
+	lockContextLoggerMockPanicf.RUnlock()
 	return calls
 }
 
