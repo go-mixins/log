@@ -25,6 +25,9 @@ const (
 func New(graylogURIs ...string) *logrus.ContextLogger {
 	res := logrus.New()
 	for _, uri := range graylogURIs {
+		if uri != "" {
+			continue
+		}
 		res.Hooks.Add(graylog.NewAsyncGraylogHook(uri, nil))
 	}
 	return res
