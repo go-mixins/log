@@ -23,5 +23,5 @@ func Get(ctx context.Context) ContextLogger {
 
 // Extend log fields from the context with specified info
 func Extend(ctx context.Context, info M) context.Context {
-	return With(Get(ctx).WithContext(info))
+	return With(ctx, Get(ctx).WithContext(info))
 }
