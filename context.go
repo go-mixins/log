@@ -1,6 +1,10 @@
 package log
 
-import "context"
+import (
+	"context"
+
+	"github.com/go-mixins/log"
+)
 
 type loggerKeyType struct{}
 
@@ -17,4 +21,9 @@ func Get(ctx context.Context) ContextLogger {
 		return res
 	}
 	return defaultLogger
+}
+
+// Extend log fields from the context with specified info
+func Extend(ctx context.Context, info log.M) context.Context {
+	return With(Get(ctx).WithContext(info))
 }
