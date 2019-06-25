@@ -21,14 +21,30 @@ const (
 	PanicLevel = logrus.PanicLevel
 )
 
+type ContextLogger struct {
+	*logrus.ContextLogger
+	hooks []*graylog.GraylogHook
+}
+
+func (c *ContextLogger) Flush() error {
+	for _, h := range c.hooks {
+		h.Flush()
+	}
+	return nil
+}
+
 // New creates new ContextLogger with Logrus side-logging to specified URIs
-func New(graylogURIs ...string) *logrus.ContextLogger {
-	res := logrus.New()
+func New(graylogURIs ...string) *ContextLogger {
+	res := &ContextLogger{
+		ContextLogger: logrus.New(),
+	}
 	for _, uri := range graylogURIs {
 		if uri == "" {
 			continue
 		}
-		res.Hooks.Add(graylog.NewAsyncGraylogHook(uri, nil))
+		hook := graylog.NewAsyncGraylogHook(uri, nil)
+		res.Hooks.Add(hook)
+		res.hooks = append(res.hooks, hook)
 	}
 	return res
 }
