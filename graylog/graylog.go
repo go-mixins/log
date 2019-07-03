@@ -26,11 +26,10 @@ type ContextLogger struct {
 	hooks []*graylog.GraylogHook
 }
 
-func (c *ContextLogger) Flush() error {
+func (c *ContextLogger) Flush() {
 	for _, h := range c.hooks {
 		h.Flush()
 	}
-	return nil
 }
 
 // New creates new ContextLogger with Logrus side-logging to specified URIs
