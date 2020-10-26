@@ -4,6 +4,12 @@ import (
 	"log"
 )
 
+// IsZero returns true if logger in context is null logger
+func IsZero(l ContextLogger) bool {
+	_, ok := l.(null)
+	return ok
+}
+
 var defaultLogger = null{}
 
 type null struct{}
