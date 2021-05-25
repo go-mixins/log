@@ -46,6 +46,7 @@ func (l *Logger) Debug(v ...interface{}) {
 	if l.level > 0 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(0, "%s", fmt.Sprint(v...)))
 }
 
@@ -53,6 +54,7 @@ func (l *Logger) Debugf(f string, v ...interface{}) {
 	if l.level > 0 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(0, f, v...))
 }
 
@@ -60,6 +62,7 @@ func (l *Logger) Info(v ...interface{}) {
 	if l.level > 1 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(1, "%s", fmt.Sprint(v...)))
 }
 
@@ -67,6 +70,7 @@ func (l *Logger) Infof(f string, v ...interface{}) {
 	if l.level > 1 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(1, f, v...))
 }
 
@@ -74,6 +78,7 @@ func (l *Logger) Warn(v ...interface{}) {
 	if l.level > 2 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(2, "%s", fmt.Sprint(v...)))
 }
 
@@ -81,22 +86,27 @@ func (l *Logger) Warnf(f string, v ...interface{}) {
 	if l.level > 2 {
 		return
 	}
+	l.t.Helper()
 	l.t.Log(l.format(2, f, v...))
 }
 
 func (l *Logger) Error(v ...interface{}) {
+	l.t.Helper()
 	l.t.Log(l.format(3, "%s", fmt.Sprint(v...)))
 }
 
 func (l *Logger) Errorf(f string, v ...interface{}) {
+	l.t.Helper()
 	l.t.Log(l.format(3, f, v...))
 }
 
 func (l *Logger) Fatal(v ...interface{}) {
+	l.t.Helper()
 	l.t.Fatal(l.format(4, "%s", fmt.Sprint(v...)))
 }
 
 func (l *Logger) Fatalf(f string, v ...interface{}) {
+	l.t.Helper()
 	l.t.Fatal(l.format(4, f, v...))
 }
 
