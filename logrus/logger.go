@@ -50,12 +50,20 @@ func (cl *ContextLogger) WithContext(ctx log.M) log.ContextLogger {
 	return &entry{cl.WithFields(logrus.Fields(ctx))}
 }
 
+func (cl *ContextLogger) GetLogger() *logrus.Logger {
+    return cl.Logger
+}
+
 type entry struct {
 	*logrus.Entry
 }
 
 func (e *entry) WithContext(ctx log.M) log.ContextLogger {
 	return &entry{e.WithFields(logrus.Fields(ctx))}
+}
+
+func (e *entry) GetLogger() *logrus.Logger {
+    return e.Logger
 }
 
 // New creates new ContextLogger
