@@ -9,6 +9,10 @@ implementation of slog package.
 Create JSON, Text, or any other handler as usual, then wrap it using `log.Wrap`:
 
 ```go
+import "github.com/go-mixins/log/v2"
+
+// ...
+
 logger := log.Wrap(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 	AddSource: true,
 }))
