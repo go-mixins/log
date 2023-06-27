@@ -2,26 +2,19 @@ package log
 
 import (
 	"context"
+
+	"golang.org/x/exp/slog"
 )
 
-type loggerKeyType struct{}
+type attrsKey struct{}
 
-var loggerKey loggerKeyType
-
-// With injects logger into context
-func With(ctx context.Context, logger ContextLogger) context.Context {
-	return context.WithValue(ctx, loggerKey, logger)
+// WithAttrs injects logger attrs into context
+func WithAttrs(ctx context.Context, attrs []slog.Attr) context.Context {
+	return context.WithValue(ctx, attrsKey{}, append(attrs, Attrs(ctx)...))
 }
 
-// Get logger from the context. Returned logger is always safe to use.
-func Get(ctx context.Context) ContextLogger {
-	if res, ok := ctx.Value(loggerKey).(ContextLogger); ok {
-		return res
-	}
-	return defaultLogger
-}
-
-// Extend log fields from the context with specified info
-func Extend(ctx context.Context, info M) context.Context {
-	return With(ctx, Get(ctx).WithContext(info))
+// Attrs returs logger attrs stored in context
+func Attrs(ctx context.Context) []slog.Attr {
+	attrs, _ := ctx.Value(attrsKey{}).([]slog.Attr)
+	return attrs
 }
