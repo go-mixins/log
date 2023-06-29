@@ -9,7 +9,7 @@ import (
 type attrsKey struct{}
 
 // WithAttrs injects logger attrs into context
-func WithAttrs(ctx context.Context, attrs []slog.Attr) context.Context {
+func WithAttrs(ctx context.Context, attrs ...slog.Attr) context.Context {
 	return context.WithValue(ctx, attrsKey{}, append(attrs, Attrs(ctx)...))
 }
 
