@@ -2,9 +2,9 @@ package opencensus
 
 import (
 	"context"
+	"log/slog"
 
 	"go.opencensus.io/trace"
-	"golang.org/x/exp/slog"
 )
 
 type slogHandler struct {
